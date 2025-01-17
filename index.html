@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <title>LX Library</title>
-
+  <script>
+    // Redirect to index.html if the base URL is loaded
+    if (window.location.pathname === '/' || window.location.pathname === '/Blog/') {
+      window.location.replace('/Blog/index.html');
+    }
+  </script>
   <!-- Include PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>

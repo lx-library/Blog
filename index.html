@@ -184,7 +184,7 @@
       id: "ged_vs_caps_rec_criterion",
       name: "GED vs CAPS Recreation Criterion",
       // Adjust this path so it matches your actual folder
-      path: "./blog/pdfs/ged_vs_caps_rec_criterion.pdf",
+      path: "./pdfs/ged_vs_caps_rec_criterion.pdf",
       uploadDate: "2024-01-17",
       lastEdited: "2024-01-17",
       metaDescription: "Analysis of recreation criteria between GED and CAPS systems",
@@ -278,23 +278,25 @@
 
     const articleContent = document.getElementById("articleContent");
     articleContent.innerHTML = `
-      <div class="pdf-header">
-        <h2>${article.name}</h2>
-        <p>${article.metaDescription}</p>
-        <p class="article-date">
-          Author: ${article.author} | Last edited: ${article.lastEdited}
-        </p>
-      </div>
-      <div id="pdfViewer"></div>
-      <div class="pdf-controls">
-        <button onclick="changePage(-1)">Previous</button>
-        <span id="pageNum">Loading...</span>
-        <button onclick="changePage(1)">Next</button>
-      </div>
-    `;
+    <div class="pdf-header">
+      <h2>${article.name}</h2>
+      <p>${article.metaDescription}</p>
+      <p class="article-date">
+        Author: ${article.author} | Last edited: ${article.lastEdited}
+      </p>
+    </div>
+    <div id="pdfViewer"></div>
+    <div class="pdf-controls">
+      <button onclick="changePage(-1)">Previous</button>
+      <span id="pageNum">Loading...</span>
+      <button onclick="changePage(1)">Next</button>
+    </div>
+  `;
 
-    // Update browser URL (optional for single-page apps)
-    history.pushState({}, "", `/${article.id}`);
+    // Update browser URL with query parameter
+    const url = new URL(window.location);
+    url.searchParams.set('article', article.id);
+    history.pushState({}, "", url);
 
     // Highlight selected article in the sidebar
     document.querySelectorAll(".article-item").forEach((item) => {
@@ -307,7 +309,6 @@
     // Actually load and render the PDF
     await loadPDF(article.path);
   }
-
   // -----------------------------------------------------
   // 5) PAGE NAVIGATION
   // -----------------------------------------------------
@@ -360,21 +361,22 @@
       li.className = "article-item";
       li.dataset.id = article.id;
       li.innerHTML = `
-        <h3 class="article-title">${article.name}</h3>
-        <p class="article-meta">${article.metaDescription}</p>
-        <p class="article-date">
-          Author: ${article.author}<br />
-          Last edited: ${article.lastEdited}
-        </p>
-      `;
+      <h3 class="article-title">${article.name}</h3>
+      <p class="article-meta">${article.metaDescription}</p>
+      <p class="article-date">
+        Author: ${article.author}<br />
+        Last edited: ${article.lastEdited}
+      </p>
+    `;
       li.onclick = () => loadArticle(article);
       articleList.appendChild(li);
     });
 
     // Decide which article to load, or show index
-    const path = window.location.pathname.split("/").pop();
-    if (path) {
-      const article = articles.find((a) => a.id === path);
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('article');
+    if (articleId) {
+      const article = articles.find((a) => a.id === articleId);
       if (article) {
         loadArticle(article);
       } else {

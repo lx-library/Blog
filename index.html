@@ -186,7 +186,7 @@
 
 <main>
   <aside class="sidebar">
-    <h2>Articles</h2>
+    <h2>Recent Articles</h2>
     <ul class="article-list" id="articleList"></ul>
   </aside>
 
@@ -238,6 +238,10 @@
 
   async function loadPDF(url) {
     try {
+      console.log('Loading PDF from URL:', url);
+      if (!pdfjsLib) {
+        throw new Error('PDF.js library is not loaded.');
+      }
       const loadingTask = pdfjsLib.getDocument(url);
       pdfDoc = await loadingTask.promise;
       currentPageNum = 1;
@@ -251,6 +255,7 @@
       document.getElementById('pageNum').textContent = `Page ${currentPageNum} of ${pdfDoc.numPages}`;
     } catch (error) {
       console.error('Error loading PDF:', error);
+      document.getElementById('pdfViewer').innerHTML = '<p>Error loading PDF. Please try again later.</p>';
     }
   }
 

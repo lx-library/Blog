@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LX Library</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+
   <style>
     * {
       margin: 0;
@@ -200,7 +202,7 @@
     {
       id: 'ged_vs_caps_rec_criterion',
       name: 'GED vs CAPS Recreation Criterion',
-      path: 'articles/ged_vs_caps_rec_criterion.pdf',
+      path: '/articles/ged_vs_caps_rec_criterion.pdf',
       uploadDate: '2024-01-17',
       lastEdited: '2024-01-17',
       metaDescription: 'Analysis of recreation criteria between GED and CAPS systems',
@@ -214,52 +216,95 @@
   let pdfDoc = null;
 
   async function renderPage(pageNum) {
-    const page = await pdfDoc.getPage(pageNum);
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
+    try {
+      const page = await pdfDoc.getPage(pageNum);
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
 
-    const viewport = page.getViewport({ scale: 1.5 });
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
+      // Adjust scale based on container width
+      const container = document.getElementById('pdfViewer');
+      const desiredWidth = container.clientWidth - 40; // Account for padding
+      const viewport = page.getViewport({ scale: 1.0 });
+      const scale = desiredWidth / viewport.width;
+      const scaledViewport = page.getViewport({ scale });
 
-    const renderContext = {
-      canvasContext: context,
-      viewport: viewport
-    };
+      canvas.width = scaledViewport.width;
+      canvas.height = scaledViewport.height;
 
-    await page.render(renderContext).promise;
+      const renderContext = {
+        canvasContext: context,
+        viewport: scaledViewport
+      };
 
-    const pageDiv = document.createElement('div');
-    pageDiv.className = 'pdf-page';
-    pageDiv.appendChild(canvas);
+      await page.render(renderContext).promise;
 
-    return pageDiv;
+      const pageDiv = document.createElement('div');
+      pageDiv.className = 'pdf-page';
+      pageDiv.appendChild(canvas);
+
+      return pageDiv;
+    } catch (error) {
+      console.error('Error rendering page:', error);
+      throw error;
+    }
   }
 
   async function loadPDF(url) {
     try {
-      console.log('Loading PDF from URL:', url);
-      if (!pdfjsLib) {
-        throw new Error('PDF.js library is not loaded.');
+      const pdfViewer = document.getElementById('pdfViewer');
+      pdfViewer.innerHTML = '<p>Loading PDF...</p>';
+
+      // Add error handling for URL
+      if (!url) {
+        throw new Error('PDF URL is undefined or empty');
       }
-      const loadingTask = pdfjsLib.getDocument(url);
+
+      // Convert relative path to absolute path if necessary
+      const absolutePath = url.startsWith('/')
+        ? window.location.origin + url
+        : new URL(url, window.location.origin).href;
+
+      console.log('Attempting to load PDF from:', absolutePath); // Debug log
+
+      // Load the PDF document
+      const loadingTask = pdfjsLib.getDocument({
+        url: absolutePath,
+        cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+        cMapPacked: true,
+      });
+
       pdfDoc = await loadingTask.promise;
       currentPageNum = 1;
 
-      const pdfViewer = document.getElementById('pdfViewer');
+      // Clear the loading message
       pdfViewer.innerHTML = '';
 
+      // Render the first page
       const pageDiv = await renderPage(currentPageNum);
       pdfViewer.appendChild(pageDiv);
 
-      document.getElementById('pageNum').textContent = `Page ${currentPageNum} of ${pdfDoc.numPages}`;
+      // Update page counter
+      const pageNum = document.getElementById('pageNum');
+      if (pageNum) {
+        pageNum.textContent = `Page ${currentPageNum} of ${pdfDoc.numPages}`;
+      }
+
     } catch (error) {
       console.error('Error loading PDF:', error);
-      document.getElementById('pdfViewer').innerHTML = '<p>Error loading PDF. Please try again later.</p>';
+      const errorMessage = error.message || 'Error loading PDF. Please check if the file exists and try again.';
+      document.getElementById('pdfViewer').innerHTML = `
+      <p style="color: red;">Error: ${errorMessage}</p>
+      <p>Attempted path: ${url}</p>
+    `;
     }
   }
 
   async function loadArticle(article) {
+    if (!article || !article.path) {
+      console.error('Invalid article data');
+      return;
+    }
+
     const articleContent = document.getElementById('articleContent');
 
     articleContent.innerHTML = `
@@ -289,7 +334,11 @@
       }
     });
 
-    await loadPDF(article.path);
+    try {
+      await loadPDF(article.path);
+    } catch (error) {
+      console.error('Error in loadArticle:', error);
+    }
   }
 
   async function changePage(offset) {

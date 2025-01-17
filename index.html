@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
   <title>LX Library</title>
+
+  <!-- Include PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
 
@@ -13,20 +14,17 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #f5f5f5;
       min-height: 100vh;
     }
-
     header {
-      background: white;
+      background: #fff;
       padding: 1rem;
       border-bottom: 3px solid #11c9cd;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-
     .header-content {
       max-width: 1200px;
       margin: 0 auto;
@@ -34,19 +32,16 @@
       align-items: center;
       gap: 1rem;
     }
-
     .logo {
       height: 32px;
       width: 32px;
       border-radius: 50%;
     }
-
     .site-title {
       font-size: 1.5rem;
       font-weight: bold;
       color: #11c9cd;
     }
-
     main {
       max-width: 1200px;
       margin: 2rem auto;
@@ -55,19 +50,16 @@
       grid-template-columns: 300px 1fr;
       gap: 2rem;
     }
-
     .sidebar {
       background: white;
       padding: 1.5rem;
       border-radius: 0.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       height: fit-content;
     }
-
     .article-list {
       list-style: none;
     }
-
     .article-item {
       padding: 1rem;
       margin: 0.5rem 0;
@@ -76,58 +68,48 @@
       transition: all 0.2s;
       border: 1px solid transparent;
     }
-
     .article-item:hover {
       border-color: #11c9cd;
       background: rgba(17, 201, 205, 0.05);
     }
-
     .article-item.selected {
       background: rgba(17, 201, 205, 0.1);
       border-color: #11c9cd;
       color: #0a7a7d;
     }
-
     .article-title {
       font-weight: 500;
       margin-bottom: 0.5rem;
     }
-
     .article-meta {
       font-size: 0.875rem;
       color: #666;
     }
-
     .article-date {
       font-size: 0.75rem;
       color: #888;
       margin-top: 0.5rem;
     }
-
     .content {
       background: white;
       padding: 1.5rem;
       border-radius: 0.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       min-height: 80vh;
     }
-
     .pdf-header {
       margin-bottom: 1.5rem;
       padding-bottom: 1.5rem;
       border-bottom: 1px solid #eee;
     }
-
     .pdf-header h2 {
       color: #11c9cd;
       margin-bottom: 0.5rem;
     }
-
     .pdf-header p {
       color: #666;
       font-size: 0.9rem;
     }
-
     .pdf-controls {
       display: flex;
       align-items: center;
@@ -137,7 +119,6 @@
       background: #f8f8f8;
       border-radius: 0.5rem;
     }
-
     .pdf-controls button {
       padding: 0.5rem 1rem;
       border: none;
@@ -147,15 +128,12 @@
       cursor: pointer;
       font-size: 0.9rem;
     }
-
     .pdf-controls button:hover {
       background: #0fa3a7;
     }
-
     .pdf-controls span {
       color: #666;
     }
-
     #pdfViewer {
       width: 100%;
       min-height: 800px;
@@ -163,14 +141,12 @@
       border-radius: 0.5rem;
       padding: 1rem;
     }
-
     .pdf-page {
       margin: 1rem auto;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       background: white;
       border-radius: 0.25rem;
     }
-
     @media (max-width: 768px) {
       main {
         grid-template-columns: 1fr;
@@ -181,7 +157,7 @@
 <body>
 <header>
   <div class="header-content">
-    <img src="icon.jpg" alt="LX Library" class="logo">
+    <img src="icon.jpg" alt="LX Library" class="logo" />
     <h1 class="site-title">LX Library</h1>
   </div>
 </header>
@@ -198,211 +174,207 @@
 </main>
 
 <script>
+  // -----------------------------------------------------
+  // 1) ARTICLES ARRAY
+  // -----------------------------------------------------
+  // Instead of "/pdfs/filename.pdf", point directly to
+  // where the PDF truly lives (e.g. "./pdfs/filename.pdf")
   const articles = [
     {
-      id: 'ged_vs_caps_rec_criterion',
-      name: 'GED vs CAPS Recreation Criterion',
-      path: '/articles/ged_vs_caps_rec_criterion.pdf',
-      uploadDate: '2024-01-17',
-      lastEdited: '2024-01-17',
-      metaDescription: 'Analysis of recreation criteria between GED and CAPS systems',
-      author: 'LX Library'
-    }
+      id: "ged_vs_caps_rec_criterion",
+      name: "GED vs CAPS Recreation Criterion",
+      // Adjust this path so it matches your actual folder
+      path: "./blog/pdfs/ged_vs_caps_rec_criterion.pdf",
+      uploadDate: "2024-01-17",
+      lastEdited: "2024-01-17",
+      metaDescription: "Analysis of recreation criteria between GED and CAPS systems",
+      author: "LX Library",
+    },
   ];
 
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  // Let PDF.js know where its worker is located
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-  let currentPageNum = 1;
   let pdfDoc = null;
+  let currentPageNum = 1;
 
+  // -----------------------------------------------------
+  // 2) RENDER PAGE FUNCTION
+  // -----------------------------------------------------
   async function renderPage(pageNum) {
-    try {
-      const page = await pdfDoc.getPage(pageNum);
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
+    const page = await pdfDoc.getPage(pageNum);
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
 
-      // Adjust scale based on container width
-      const container = document.getElementById('pdfViewer');
-      const desiredWidth = container.clientWidth - 40; // Account for padding
-      const viewport = page.getViewport({ scale: 1.0 });
-      const scale = desiredWidth / viewport.width;
-      const scaledViewport = page.getViewport({ scale });
+    // Adjust scale based on container width
+    const container = document.getElementById("pdfViewer");
+    const desiredWidth = container.clientWidth - 40; // Account for padding
+    const viewport = page.getViewport({ scale: 1.0 });
+    const scale = desiredWidth / viewport.width;
+    const scaledViewport = page.getViewport({ scale });
 
-      canvas.width = scaledViewport.width;
-      canvas.height = scaledViewport.height;
+    canvas.width = scaledViewport.width;
+    canvas.height = scaledViewport.height;
 
-      const renderContext = {
-        canvasContext: context,
-        viewport: scaledViewport
-      };
+    const renderContext = {
+      canvasContext: context,
+      viewport: scaledViewport,
+    };
 
-      await page.render(renderContext).promise;
+    await page.render(renderContext).promise;
 
-      const pageDiv = document.createElement('div');
-      pageDiv.className = 'pdf-page';
-      pageDiv.appendChild(canvas);
+    const pageDiv = document.createElement("div");
+    pageDiv.className = "pdf-page";
+    pageDiv.appendChild(canvas);
 
-      return pageDiv;
-    } catch (error) {
-      console.error('Error rendering page:', error);
-      throw error;
-    }
+    return pageDiv;
   }
 
+  // -----------------------------------------------------
+  // 3) LOAD PDF FUNCTION
+  // -----------------------------------------------------
+  // Notice we simply pass the PDF URL to pdf.js—no more
+  // messing with absolute/relative path building.
+  // Just ensure `article.path` is correct on your server.
+  // -----------------------------------------------------
   async function loadPDF(url) {
+    const pdfViewer = document.getElementById("pdfViewer");
+    pdfViewer.innerHTML = "<p>Loading PDF...</p>";
+
     try {
-      const pdfViewer = document.getElementById('pdfViewer');
-      pdfViewer.innerHTML = '<p>Loading PDF...</p>';
-
-      // Add error handling for URL
-      if (!url) {
-        throw new Error('PDF URL is undefined or empty');
-      }
-
-      // Convert relative path to absolute path if necessary
-      const absolutePath = url.startsWith('/')
-        ? window.location.origin + url
-        : new URL(url, window.location.origin).href;
-
-      console.log('Attempting to load PDF from:', absolutePath); // Debug log
-
-      // Load the PDF document
-      const loadingTask = pdfjsLib.getDocument({
-        url: absolutePath,
-        cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
-        cMapPacked: true,
-      });
-
+      // Attempt to load the PDF document directly from the given URL/path
+      const loadingTask = pdfjsLib.getDocument(url);
       pdfDoc = await loadingTask.promise;
+
+      // If successful, render the first page
       currentPageNum = 1;
-
-      // Clear the loading message
-      pdfViewer.innerHTML = '';
-
-      // Render the first page
+      pdfViewer.innerHTML = "";
       const pageDiv = await renderPage(currentPageNum);
       pdfViewer.appendChild(pageDiv);
 
       // Update page counter
-      const pageNum = document.getElementById('pageNum');
+      const pageNum = document.getElementById("pageNum");
       if (pageNum) {
         pageNum.textContent = `Page ${currentPageNum} of ${pdfDoc.numPages}`;
       }
-
     } catch (error) {
-      console.error('Error loading PDF:', error);
-      const errorMessage = error.message || 'Error loading PDF. Please check if the file exists and try again.';
-      document.getElementById('pdfViewer').innerHTML = `
-      <p style="color: red;">Error: ${errorMessage}</p>
-      <p>Attempted path: ${url}</p>
-    `;
+      console.error("Error loading PDF:", error);
+      pdfViewer.innerHTML = `
+        <p style="color: red;">Error: ${error.message || "Cannot load PDF."}</p>
+        <p>Attempted path: ${url}</p>
+      `;
     }
   }
 
+  // -----------------------------------------------------
+  // 4) LOAD ARTICLE
+  // -----------------------------------------------------
   async function loadArticle(article) {
     if (!article || !article.path) {
-      console.error('Invalid article data');
+      console.error("Invalid article data");
       return;
     }
 
-    const articleContent = document.getElementById('articleContent');
-
+    const articleContent = document.getElementById("articleContent");
     articleContent.innerHTML = `
-    <div class="pdf-header">
-      <h2>${article.name}</h2>
-      <p>${article.metaDescription}</p>
-      <p class="article-date">
-        Author: ${article.author} | Last edited: ${article.lastEdited}
-      </p>
-    </div>
-    <div id="pdfViewer"></div>
-    <div class="pdf-controls">
-      <button onclick="changePage(-1)">Previous</button>
-      <span id="pageNum">Loading...</span>
-      <button onclick="changePage(1)">Next</button>
-    </div>
-  `;
+      <div class="pdf-header">
+        <h2>${article.name}</h2>
+        <p>${article.metaDescription}</p>
+        <p class="article-date">
+          Author: ${article.author} | Last edited: ${article.lastEdited}
+        </p>
+      </div>
+      <div id="pdfViewer"></div>
+      <div class="pdf-controls">
+        <button onclick="changePage(-1)">Previous</button>
+        <span id="pageNum">Loading...</span>
+        <button onclick="changePage(1)">Next</button>
+      </div>
+    `;
 
-    // Update URL
-    history.pushState({}, '', `/${article.id}`);
+    // Update browser URL (optional for single-page apps)
+    history.pushState({}, "", `/${article.id}`);
 
-    // Update selected state in sidebar
-    document.querySelectorAll('.article-item').forEach(item => {
-      item.classList.remove('selected');
+    // Highlight selected article in the sidebar
+    document.querySelectorAll(".article-item").forEach((item) => {
+      item.classList.remove("selected");
       if (item.dataset.id === article.id) {
-        item.classList.add('selected');
+        item.classList.add("selected");
       }
     });
 
-    try {
-      await loadPDF(article.path);
-    } catch (error) {
-      console.error('Error in loadArticle:', error);
-    }
+    // Actually load and render the PDF
+    await loadPDF(article.path);
   }
 
+  // -----------------------------------------------------
+  // 5) PAGE NAVIGATION
+  // -----------------------------------------------------
   async function changePage(offset) {
     const newPageNum = currentPageNum + offset;
-
     if (newPageNum >= 1 && newPageNum <= pdfDoc.numPages) {
       currentPageNum = newPageNum;
-      const pdfViewer = document.getElementById('pdfViewer');
-      pdfViewer.innerHTML = '';
-
+      const pdfViewer = document.getElementById("pdfViewer");
+      pdfViewer.innerHTML = "";
       const pageDiv = await renderPage(currentPageNum);
       pdfViewer.appendChild(pageDiv);
 
-      document.getElementById('pageNum').textContent = `Page ${currentPageNum} of ${pdfDoc.numPages}`;
+      document.getElementById("pageNum").textContent = `Page ${currentPageNum} of ${pdfDoc.numPages}`;
     }
   }
 
+  // -----------------------------------------------------
+  // 6) LOAD BLOG INDEX (an optional fallback view)
+  // -----------------------------------------------------
   function loadBlogIndex() {
-    const articleContent = document.getElementById('articleContent');
+    const articleContent = document.getElementById("articleContent");
     articleContent.innerHTML = '<h2>Blog Index</h2><ul class="article-list"></ul>';
 
-    const articleList = articleContent.querySelector('.article-list');
-    articles.forEach(article => {
-      const li = document.createElement('li');
-      li.className = 'article-item';
+    const articleListEl = articleContent.querySelector(".article-list");
+    articles.forEach((article) => {
+      const li = document.createElement("li");
+      li.className = "article-item";
       li.dataset.id = article.id;
       li.innerHTML = `
-      <h3 class="article-title">${article.name}</h3>
-      <p class="article-meta">${article.metaDescription}</p>
-      <p class="article-date">
-        Author: ${article.author}<br>
-        Last edited: ${article.lastEdited}
-      </p>
-    `;
+        <h3 class="article-title">${article.name}</h3>
+        <p class="article-meta">${article.metaDescription}</p>
+        <p class="article-date">
+          Author: ${article.author}<br />
+          Last edited: ${article.lastEdited}
+        </p>
+      `;
       li.onclick = () => loadArticle(article);
-      articleList.appendChild(li);
+      articleListEl.appendChild(li);
     });
   }
 
-
+  // -----------------------------------------------------
+  // 7) INITIALIZE THE PAGE
+  // -----------------------------------------------------
   function initializePage() {
-    const articleList = document.getElementById('articleList');
-
     // Populate sidebar
-    articles.forEach(article => {
-      const li = document.createElement('li');
-      li.className = 'article-item';
+    const articleList = document.getElementById("articleList");
+    articles.forEach((article) => {
+      const li = document.createElement("li");
+      li.className = "article-item";
       li.dataset.id = article.id;
       li.innerHTML = `
-      <h3 class="article-title">${article.name}</h3>
-      <p class="article-meta">${article.metaDescription}</p>
-      <p class="article-date">
-        Author: ${article.author}<br>
-        Last edited: ${article.lastEdited}
-      </p>
-    `;
+        <h3 class="article-title">${article.name}</h3>
+        <p class="article-meta">${article.metaDescription}</p>
+        <p class="article-date">
+          Author: ${article.author}<br />
+          Last edited: ${article.lastEdited}
+        </p>
+      `;
       li.onclick = () => loadArticle(article);
       articleList.appendChild(li);
     });
 
-    // Load article from URL or default to index
-    const path = window.location.pathname.split('/').pop();
+    // Decide which article to load, or show index
+    const path = window.location.pathname.split("/").pop();
     if (path) {
-      const article = articles.find(a => a.id === path);
+      const article = articles.find((a) => a.id === path);
       if (article) {
         loadArticle(article);
       } else {
@@ -413,13 +385,16 @@
     }
   }
 
-  // Handle browser back/forward
+  // -----------------------------------------------------
+  // 8) HANDLE BROWSER BACK/FORWARD
+  // -----------------------------------------------------
   window.onpopstate = () => {
-    const path = window.location.pathname.split('/').pop();
-    const article = articles.find(a => a.id === path) || articles[0];
+    const path = window.location.pathname.split("/").pop();
+    const article = articles.find((a) => a.id === path) || articles[0];
     loadArticle(article);
   };
 
+  // Start the app
   initializePage();
 </script>
 </body>
